@@ -7,6 +7,8 @@ const Search = () => {
   const [results, setResults] = useState([])
 
   useEffect(() => {
+    console.log('Inital render or term was changed')
+
     const search = async () => {
       const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
         params: {
@@ -19,9 +21,41 @@ const Search = () => {
       })
       setResults(data.query.search)
     }
-    search()
+    if (term && !results.length) {
+      search()
+    } else {
+      const timeoutId = setTimeout(() => {
+        console.log('timesup')
+        if (term) search()
+      }, 1000)
+      return () => {
+        clearTimeout(timeoutId)
+      }
+    }
+
+
   }, [term])
 
+  const renderedResults = results.map(result => {
+    return (
+      <div key={result.pageid} className="item">
+        <div className="right floated content">
+          <a
+            className="ui button"
+            href={`https://en.wikipedia.org?curid=${result.pageid}`}
+          >
+            Go
+          </a>
+        </div>
+        <div className="content">
+          <div className="header">
+            {result.title}
+          </div>
+          <span dangerslysetinnerhtml={{ __html: result.snippet }}></span>
+        </div>
+      </div>
+    )
+  })
 
   return (
     <div>
@@ -34,6 +68,9 @@ const Search = () => {
             onChange={e => setTerm(e.target.value)}
           />
         </div>
+      </div>
+      <div className="ui celled list">
+        {renderedResults}
       </div>
     </div >
   )
