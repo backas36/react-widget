@@ -5,12 +5,20 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
   const ref = useRef()
 
   useEffect(() => {
-    document.body.addEventListener('click', (event) => {
+    console.log('useEffect')
+    const onBodyClick = (event) => {
       if (ref.current.contains(event.target)) {
         return
       }
       setOpen(false)
-    }, { capture: true })
+    }
+
+    document.body.addEventListener('click', onBodyClick, { capture: true })
+
+    return () => {
+      document.body.removeEventListener('click', onBodyClick, { capture: true })
+      console.log('useEffect cleanup')
+    }
   }, [])
 
   const renderedOptions = options.map(option => {
@@ -51,6 +59,9 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
             {renderedOptions}
           </div>
         </div>
+      </div>
+      <div className="ui segment">
+        <p style={{ color: selected.value }}>This text is {selected.value} </p>
       </div>
     </div>
   )
