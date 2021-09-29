@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 
-const Dropdown = ({ options, selected, onSelectedChange }) => {
+const Dropdown = ({ options, selected, onSelectedChange, label }) => {
   const [open, setOpen] = useState(false)
   const ref = useRef()
 
   useEffect(() => {
-    console.log('useEffect')
     const onBodyClick = (event) => {
       if (ref.current.contains(event.target)) {
         return
@@ -17,7 +16,6 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
 
     return () => {
       document.body.removeEventListener('click', onBodyClick, { capture: true })
-      console.log('useEffect cleanup')
     }
   }, [])
 
@@ -41,7 +39,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
   return (
     <div ref={ref} className="ui form">
       <div className="field">
-        <label className="label">Select a Color</label>
+        <label className="label">{label}</label>
         <div
           onClick={() => {
             setOpen(!open)
@@ -60,9 +58,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
           </div>
         </div>
       </div>
-      <div className="ui segment">
-        <p style={{ color: selected.value }}>This text is {selected.value} </p>
-      </div>
+
     </div>
   )
 }
