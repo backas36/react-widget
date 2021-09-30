@@ -64,3 +64,14 @@ const Dropdown = ({ options, selected, onSelectedChange, label }) => {
 }
 
 export default Dropdown
+
+
+/*
+
+User clicks on 'List'
+Change the URL, but don't do a full page refresh!
+Each Route could detect the URL has changed
+Route could update piece of state tracking the current pathname
+Each Route rerenders, showing/hiding components appropriately
+
+*/
